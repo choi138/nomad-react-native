@@ -1,5 +1,9 @@
 import { StatusBar } from "expo-status-bar";
+import { Dimensions } from "react-native";
 import * as S from "./styled";
+
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
+
 
 export default function App() {
   return (
@@ -7,8 +11,20 @@ export default function App() {
       <S.CityWrap >
         <S.CityName >Seoul</S.CityName>
       </S.CityWrap>
-      <S.WeatherWrap >
-        <S.WeatherInfo>
+      <S.WeatherWrap pagingEnabled horizontal showsHorizontalScrollIndicator={false}>
+        <S.WeatherInfo screen_width={SCREEN_WIDTH}>
+          <S.Temp>27</S.Temp>
+          <S.Description>Sunny</S.Description>
+        </S.WeatherInfo>
+        <S.WeatherInfo screen_width={SCREEN_WIDTH}>
+          <S.Temp>27</S.Temp>
+          <S.Description>Sunny</S.Description>
+        </S.WeatherInfo>
+        <S.WeatherInfo screen_width={SCREEN_WIDTH}>
+          <S.Temp>27</S.Temp>
+          <S.Description>Sunny</S.Description>
+        </S.WeatherInfo>
+        <S.WeatherInfo screen_width={SCREEN_WIDTH}>
           <S.Temp>27</S.Temp>
           <S.Description>Sunny</S.Description>
         </S.WeatherInfo>
@@ -22,4 +38,7 @@ export default function App() {
 // 모든 text는 Text 컴포넌트 안에 있어야 함.
 // flex를 통해서 화면을 나눌 수 있음. flex: 1은 화면을 1:1:1로 나눔.
 // flex인 부모가 중요함
-
+// pagingEnabled는 스크롤을 하다가 멈추게 함.
+// showsHorizontalScrollIndicator는 스크롤바를 없애줌.
+// screen_width는 스크린의 너비를 가져옴.
+// horizontal은 가로로 스크롤을 함.

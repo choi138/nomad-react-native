@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import styled from 'styled-components';
 
 export const Container = styled(View)`
@@ -18,12 +18,16 @@ export const CityName = styled(Text)`
     color: #fafafa;
 `;
 
-export const WeatherWrap = styled(View)`
-    flex: 3;
+export const WeatherWrap = styled(ScrollView).attrs({
+    contentContainerStyle: {
+    }
+})`
+    /* flex: 3; */
 `;
 
-export const WeatherInfo = styled(View)`
-    flex: 1;
+export const WeatherInfo = styled(View) < { screen_width: number }> `
+    /* flex: 1; */
+    width: ${props => props.screen_width};
     align-items: center;
 `;
 
