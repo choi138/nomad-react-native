@@ -11,4 +11,7 @@ export interface DAY_LIST {
         description: string;
         main: string;
     }]
+    temp: {
+        day: number
+    }
 }
