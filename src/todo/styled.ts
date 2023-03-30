@@ -15,8 +15,8 @@ export const Header = styled(View)`
   justify-content: space-between;
 `;
 
-export const Title = styled(Text)<{ color: string }>`
+export const Title = styled(Text)<{ isWorking: boolean }>`
   font-size: 38;
   font-weight: 600;
-  color: ${(props) => props.color};
+  color: ${(props) => (props.isWorking ? '#fafafa' : '#3A3D40')};
 `;

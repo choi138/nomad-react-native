@@ -1,4 +1,5 @@
 import { TouchableOpacity } from 'react-native';
+import { useState } from 'react';
 
 import { StatusBar } from 'expo-status-bar';
 
@@ -6,14 +7,18 @@ import { theme } from './colors';
 import * as S from './styled';
 
 export default function App() {
+  const [working, setWorking] = useState<boolean>(true);
+  const travel = () => setWorking(false);
+  const work = () => setWorking(true);
+
   return (
     <S.TodoContainer bg={theme.bg}>
       <S.Header>
-        <TouchableOpacity>
-          <S.Title color={theme.white}>ToDo</S.Title>
+        <TouchableOpacity onPress={work}>
+          <S.Title isWorking={working}>ToDo</S.Title>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <S.Title color={theme.white}>Travel</S.Title>
+        <TouchableOpacity onPress={travel}>
+          <S.Title isWorking={!working}>Travel</S.Title>
         </TouchableOpacity>
       </S.Header>
       <StatusBar style="light" />
