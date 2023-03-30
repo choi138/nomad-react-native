@@ -7,6 +7,7 @@
     "plugins": [
         "prettier",
         "import",
+        "react-native",
         "react",
         "react-hooks",
         "jsx-a11y"
@@ -32,7 +33,7 @@
             {
                 "pathGroups": [
                     {
-                        "pattern": "{expo*,expo*/**}",
+                        "pattern": "{@expo*, expo*, expo*/**}",
                         "group": "builtin",
                         "position": "before"
                     },
@@ -42,7 +43,7 @@
                         "position": "before"
                     },
                     {
-                        "pattern": "[@]/**",
+                        "pattern": "./**, @/**",
                         "group": "internal",
                         "position": "after"
                     }
@@ -58,7 +59,8 @@
                     "unknown"
                 ],
                 "pathGroupsExcludedImportTypes": [
-                    "react"
+                    "react",
+                    "react-native"
                 ],
                 "newlines-between": "always"
             }

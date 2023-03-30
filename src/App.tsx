@@ -14,12 +14,12 @@ export default function App() {
   const ENV = process.env.API_KEY;
 
   const icons: IconMap = {
-    Clouds: "cloudy",
-    Clear: "day-sunny",
-    Snow: "snow",
-    Rain: "rains",
-    Drizzle: "rain",
-    Thunderstorm: "lightning",
+    Clouds: 'cloudy',
+    Clear: 'day-sunny',
+    Snow: 'snow',
+    Rain: 'rains',
+    Drizzle: 'rain',
+    Thunderstorm: 'lightning',
   };
 
   const [city, setCity] = useState<string | null>('Loading...');
