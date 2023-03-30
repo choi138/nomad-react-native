@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
+    "lint": "eslint \"**/*.{js,jsx,ts,tsx,json}\" --fix --cache",
+    "format": "prettier \"**/*.{js,jsx,ts,tsx,json}\" --write",
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
@@ -10,16 +12,28 @@
   },
   "dependencies": {
     "expo": "~48.0.9",
+    "expo-location": "~15.1.1",
     "expo-status-bar": "~1.4.4",
     "react": "18.2.0",
     "react-native": "0.71.4",
-    "styled-components": "^5.3.9",
-    "expo-location": "~15.1.1"
+    "styled-components": "^5.3.9"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react": "~18.0.14",
+    "@types/react-native": "^0.71.5",
+    "@types/react-native-dotenv": "^0.2.0",
     "@types/styled-components": "^5.1.26",
+    "@typescript-eslint/eslint-plugin": "^5.57.0",
+    "@typescript-eslint/parser": "^5.57.0",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-import-resolver-typescript": "^3.5.3",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.2",
+    "prettier": "^2.8.7",
+    "react-native-dotenv": "^3.4.8",
     "typescript": "^4.9.4"
   },
   "private": true

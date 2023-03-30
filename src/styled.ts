@@ -22,7 +22,6 @@ export const WeatherWrap = styled(ScrollView).attrs({
     contentContainerStyle: {
     }
 })`
-    /* flex: 3; */
 `;
 
 export const WeatherInfo = styled(View) < { screen_width: number }> `

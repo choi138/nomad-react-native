@@ -1,61 +1,67 @@
-import * as Location from "expo-location";
-import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
-import { Dimensions } from "react-native";
-import * as S from "./styled";
-
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
-
+import * as Location from 'expo-location';
+import { StatusBar } from 'expo-status-bar';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator } from 'react-native';
+import { Dimensions } from 'react-native';
+import { DAY_LIST } from './constant';
+import * as S from './styled';
 
 export default function App() {
-  const [city, setCity] = useState<string | null>("Loading...");
-  const [location, setLocation] = useState();
+  const { width: SCREEN_WIDTH } = Dimensions.get('window');
+
+  const ENV = process.env.API_KEY;
+
+  const [city, setCity] = useState<string | null>('Loading...');
+  const [days, setDays] = useState<DAY_LIST[]>();
   const [ok, setOk] = useState<boolean>(true);
 
-  const ask = async () => {
+  const getWeather = async () => {
     const { granted } = await Location.requestForegroundPermissionsAsync();
     if (!granted) {
       setOk(false);
     }
     const {
-      coords: { latitude, longitude }
+      coords: { latitude, longitude },
     } = await Location.getCurrentPositionAsync({ accuracy: 5 });
     const location = await Location.reverseGeocodeAsync(
       { latitude, longitude },
-      { useGoogleMaps: false }
+      { useGoogleMaps: false },
     );
     setCity(location[0].city);
-  }
+    const response = await fetch(
+      `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=${ENV}&units=metric`
+    );
+    const json = await response.json();
+    setDays(json.daily);
+  };
 
   useEffect(() => {
-    ask();
-  }, [])
+    getWeather();
+  }, []);
 
   return (
     <S.Container>
-      <S.CityWrap >
-        <S.CityName >{city}</S.CityName>
+      <S.CityWrap>
+        <S.CityName>{city}</S.CityName>
       </S.CityWrap>
       <S.WeatherWrap pagingEnabled horizontal showsHorizontalScrollIndicator={false}>
-        <S.WeatherInfo screen_width={SCREEN_WIDTH}>
-          <S.Temp>27</S.Temp>
-          <S.Description>Sunny</S.Description>
-        </S.WeatherInfo>
-        <S.WeatherInfo screen_width={SCREEN_WIDTH}>
-          <S.Temp>27</S.Temp>
-          <S.Description>Sunny</S.Description>
-        </S.WeatherInfo>
-        <S.WeatherInfo screen_width={SCREEN_WIDTH}>
-          <S.Temp>27</S.Temp>
-          <S.Description>Sunny</S.Description>
-        </S.WeatherInfo>
-        <S.WeatherInfo screen_width={SCREEN_WIDTH}>
-          <S.Temp>27</S.Temp>
-          <S.Description>Sunny</S.Description>
-        </S.WeatherInfo>
+        {days?.length === 0 ? (
+          <S.WeatherInfo screen_width={SCREEN_WIDTH}>
+            <ActivityIndicator color="white" />
+          </S.WeatherInfo>
+        ) : (
+          days?.map((day: any, index: any) => (
+            <S.WeatherInfo screen_width={SCREEN_WIDTH} key={index}>
+              <S.Temp>{day.weather[0].main}</S.Temp>
+              <S.Description>Sunny</S.Description>
+            </S.WeatherInfo>
+          ))
+          // <S.WeatherInfo screen_width={SCREEN_WIDTH}>
+          // </S.WeatherInfo>
+        )}
       </S.WeatherWrap>
       <StatusBar style="light" />
-    </S.Container >
+    </S.Container>
   );
 }
 
