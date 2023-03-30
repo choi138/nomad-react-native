@@ -13,8 +13,8 @@ export const CityWrap = styled(View)`
 `;
 
 export const CityName = styled(Text)`
-    font-size: 68;
-    font-weight: bold;
+    font-size: 58;
+    font-weight: 500;
     color: #fafafa;
 `;
 
@@ -24,21 +24,30 @@ export const WeatherWrap = styled(ScrollView).attrs({
 })`
 `;
 
-export const WeatherInfo = styled(View) < { screen_width: number }> `
+export const WeatherInfo = styled(View) < { screen_width: number, loading: boolean }> `
     width: ${props => props.screen_width};
-    align-items: flex-start;
+    align-items: ${props => props.loading ? 'center' : 'flex-start'};
     padding-left: 20;
+    padding-right: 20;
 `;
 
 export const TempContainer = styled(View)`
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
+    width: 100%;
+    justify-content: space-between;
+`;
+
+export const TempItem = styled(View)`
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
 `;
 
 export const Temp = styled(Text)`
     margin-top: 50;
     font-size: 100;
+    font-weight: 600;
     color: #fafafa;
 `;
 
@@ -51,7 +60,6 @@ export const TempIcon = styled(Text)`
 `;
 
 export const Description = styled(Text)`
-    margin-top: -10;
     font-size: 35;
     font-weight: 500;
     color: #fafafa;

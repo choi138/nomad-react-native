@@ -1,18 +1,30 @@
 import * as Location from 'expo-location';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, Text } from 'react-native';
+import { Fontisto } from '@expo/vector-icons';
+import { ActivityIndicator, Text, View } from 'react-native';
 import { Dimensions } from 'react-native';
-import { DAY_LIST } from './constant';
+import { useEffect, useState } from 'react';
+import { DayList, IconMap } from './constant';
 import * as S from './styled';
 
 export default function App() {
+
   const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
   const ENV = process.env.API_KEY;
 
+  const icons: IconMap = {
+    Clouds: "cloudy",
+    Clear: "day-sunny",
+    Snow: "snow",
+    Rain: "rains",
+    Drizzle: "rain",
+    Thunderstorm: "lightning",
+  };
+
   const [city, setCity] = useState<string | null>('Loading...');
-  const [days, setDays] = useState<DAY_LIST[]>([]);
+  const [days, setDays] = useState<DayList[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [ok, setOk] = useState<boolean>(true);
 
   const getWeather = async () => {
@@ -32,6 +44,7 @@ export default function App() {
       `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=${ENV}&units=metric`
     );
     const json = await response.json();
+    setLoading(false);
     setDays(json.daily);
   };
 
@@ -46,18 +59,21 @@ export default function App() {
       </S.CityWrap>
       <S.WeatherWrap pagingEnabled horizontal showsHorizontalScrollIndicator={false}>
         {days.length === 0 ? (
-          <S.WeatherInfo screen_width={SCREEN_WIDTH}>
+          <S.WeatherInfo screen_width={SCREEN_WIDTH} loading={loading}>
             <ActivityIndicator color="white" size="large" />
           </S.WeatherInfo>
         ) : (
-          days.map((day: any, index: any) => (
-            <S.WeatherInfo screen_width={SCREEN_WIDTH} key={index}>
+          days.map((day: DayList, index: number) => (
+            <S.WeatherInfo screen_width={SCREEN_WIDTH} loading={loading} key={index}>
               <S.TempContainer>
-                <S.Temp>
-                  {/** parseFloat하고 .toFixed(1)을 하면 소숫점 첫째자리까지만 표시됨 */}
-                  {parseFloat(day.temp.day).toFixed(0)}
-                </S.Temp>
-                <S.TempIcon>o</S.TempIcon>
+                <S.TempItem>
+                  <S.Temp>
+                    {/** parseFloat하고 .toFixed(1)을 하면 소숫점 첫째자리까지만 표시됨 */}
+                    {parseFloat(day.temp.day).toFixed(0)}
+                  </S.Temp>
+                  <S.TempIcon>o</S.TempIcon>
+                </S.TempItem>
+                <Fontisto name={icons[day.weather[0].main]} size={60} color="white" />
               </S.TempContainer>
               <S.Description>{day.weather[0].main}</S.Description>
               <S.SubDescription>{day.weather[0].description}</S.SubDescription>
