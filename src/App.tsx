@@ -23,7 +23,7 @@ export default function App() {
     const {
       coords: { latitude, longitude },
     } = await Location.getCurrentPositionAsync({ accuracy: 5 });
-    const location = await Location.reverseGeocodeAsync(
+    const location = await Location.reverseGeocodeAsync( // reverseGeocodeAsync는 위도와 경도를 통해 주소를 알아냄
       { latitude, longitude },
       { useGoogleMaps: false },
     );
@@ -45,12 +45,12 @@ export default function App() {
         <S.CityName>{city}</S.CityName>
       </S.CityWrap>
       <S.WeatherWrap pagingEnabled horizontal showsHorizontalScrollIndicator={false}>
-        {days?.length === 0 || days?.length === undefined ? (
+        {days.length === 0 ? (
           <S.WeatherInfo screen_width={SCREEN_WIDTH}>
             <ActivityIndicator color="white" size="large" />
           </S.WeatherInfo>
         ) : (
-          days?.map((day: any, index: any) => (
+          days.map((day: any, index: any) => (
             <S.WeatherInfo screen_width={SCREEN_WIDTH} key={index}>
               <S.TempContainer>
                 <S.Temp>
@@ -78,3 +78,5 @@ export default function App() {
 // showsHorizontalScrollIndicator는 스크롤바를 없애줌.
 // screen_width는 스크린의 너비를 가져옴.
 // horizontal은 가로로 스크롤을 함.
+
+// ok 확인 여부 UI는 혼자서 ㄱㄱ
