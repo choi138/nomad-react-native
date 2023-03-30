@@ -1,14 +1,15 @@
+import { ActivityIndicator } from 'react-native';
+import { Dimensions } from 'react-native';
+import { useEffect, useState } from 'react';
+
 import * as Location from 'expo-location';
 import { StatusBar } from 'expo-status-bar';
 import { Fontisto } from '@expo/vector-icons';
-import { ActivityIndicator, Text, View } from 'react-native';
-import { Dimensions } from 'react-native';
-import { useEffect, useState } from 'react';
+
 import { DayList, IconMap } from './constant';
 import * as S from './styled';
 
 export default function App() {
-
   const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
   const ENV = process.env.API_KEY;
@@ -35,13 +36,14 @@ export default function App() {
     const {
       coords: { latitude, longitude },
     } = await Location.getCurrentPositionAsync({ accuracy: 5 });
-    const location = await Location.reverseGeocodeAsync( // reverseGeocodeAsync는 위도와 경도를 통해 주소를 알아냄
+    const location = await Location.reverseGeocodeAsync(
+      // reverseGeocodeAsync는 위도와 경도를 통해 주소를 알아냄
       { latitude, longitude },
       { useGoogleMaps: false },
     );
     setCity(location[0].city);
     const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=${ENV}&units=metric`
+      `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=${ENV}&units=metric`,
     );
     const json = await response.json();
     setLoading(false);
