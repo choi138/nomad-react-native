@@ -1,7 +1,9 @@
-import { TouchableOpacity } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { useState } from 'react';
 
 import { StatusBar } from 'expo-status-bar';
+
+import { ToDoItem } from '@/constant';
 
 import { theme } from './colors';
 import * as S from './styled';
@@ -9,7 +11,7 @@ import * as S from './styled';
 export default function App() {
   const [working, setWorking] = useState<boolean>(true);
   const [text, setText] = useState<string>('');
-  const [toDos, setToDos] = useState<object>({});
+  const [toDos, setToDos] = useState<ToDoItem>({});
 
   const travel = () => setWorking(false);
   const work = () => setWorking(true);
@@ -23,12 +25,16 @@ export default function App() {
       return;
     }
 
-    // save to do
-    const newToDos = Object.assign({}, toDos, { [Date.now()]: { text: text, work: working } });
+    // 방법 1
+    // const newToDos = Object.assign({}, toDos, { [Date.now()]: { text: text, work: working } });
     // Object assign을 통해 3개의 object를 하나의 object로 합침
+
+    // 방법2
+    const newToDos = { ...toDos, [Date.now()]: { text: text, work: working } };
+    // spread operator를 통해 3개의 object를 하나의 object로 합침
+
     setToDos(newToDos);
     setText('');
-    console.log(newToDos);
   };
 
   return (
@@ -48,6 +54,16 @@ export default function App() {
         value={text}
         placeholder={working ? 'Add a To Do' : 'Where do you want to go?'}
       />
+      <ScrollView>
+        {Object.keys(toDos).map((key: string) => {
+          const toDo = toDos[key];
+          return (
+            <S.ToDoList key={key} bgColor={theme.gray}>
+              <S.ToDo>{toDo.text}</S.ToDo>
+            </S.ToDoList>
+          );
+        })}
+      </ScrollView>
       <StatusBar style="light" />
     </S.TodoContainer>
   );

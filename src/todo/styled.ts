@@ -24,6 +24,19 @@ export const Input = styled(TextInput)`
   background-color: white;
   padding: 15px 20px;
   border-radius: 30;
-  margin-top: 20;
+  margin: 20px 0;
   font-size: 18;
+`;
+
+export const ToDoList = styled(View)<{ bgColor: string }>`
+  background-color: ${(props) => props.bgColor};
+  margin-bottom: 10;
+  padding: 20px;
+  border-radius: 15;
+`;
+
+export const ToDo = styled(Text)`
+  color: #fafafa;
+  font-size: 16;
+  font-weight: 500;
 `;

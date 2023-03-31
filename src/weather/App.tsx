@@ -6,7 +6,8 @@ import * as Location from 'expo-location';
 import { StatusBar } from 'expo-status-bar';
 import { Fontisto } from '@expo/vector-icons';
 
-import { DayList, IconMap } from './constant';
+import { DayList, IconMap } from '@/constant';
+
 import * as S from './styled';
 
 export default function App() {
