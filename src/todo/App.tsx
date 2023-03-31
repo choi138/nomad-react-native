@@ -1,4 +1,4 @@
-import { TouchableOpacity } from 'react-native';
+import { TextInput, TouchableOpacity, View } from 'react-native';
 import { useState } from 'react';
 
 import { StatusBar } from 'expo-status-bar';
@@ -21,6 +21,9 @@ export default function App() {
           <S.Title isWorking={!working}>Travel</S.Title>
         </TouchableOpacity>
       </S.Header>
+      <View>
+        <S.Input />
+      </View>
       <StatusBar style="light" />
     </S.TodoContainer>
   );
@@ -45,4 +48,6 @@ https://docs.expo.dev/versions/v44.0.0/react-native/touchablewithoutfeedback/
 Pressable
 Pressable은 정의된 자식에 대한 다양한 Press 상호 작용 단계를 감지할 수 있는 핵심 구성 요소 래퍼입니다.
 https://docs.expo.dev/versions/v44.0.0/react-native/pressable/
+
+리네에선 text-area 대신에 text-input이 있음
  */
