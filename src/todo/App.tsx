@@ -1,14 +1,18 @@
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { useState } from 'react';
+import { ScrollView, TouchableOpacity } from 'react-native';
+import { useEffect, useState } from 'react';
 
 import { StatusBar } from 'expo-status-bar';
 
-import { ToDoItem } from '@/constant';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { ToDoItem, STORAGE_KEY } from '../constant';
 
 import { theme } from './colors';
 import * as S from './styled';
 
 export default function App() {
+
+
   const [working, setWorking] = useState<boolean>(true);
   const [text, setText] = useState<string>('');
   const [toDos, setToDos] = useState<ToDoItem>({});
@@ -20,22 +24,38 @@ export default function App() {
     setText(payload);
   };
 
-  const addToDo = () => {
+  const saveToDos = async (toSave: ToDoItem) => {
+    const saveToDos = JSON.stringify(toSave);
+    await AsyncStorage.setItem(STORAGE_KEY, saveToDos);
+  };
+
+  const loadToDos = async () => {
+    const getToDos = await AsyncStorage.getItem(STORAGE_KEY);
+    console.log(getToDos ? JSON.parse(getToDos) : [])
+    setToDos(getToDos ? JSON.parse(getToDos) : [])
+  }
+
+  const addToDo = async () => {
     if (text === '') {
       return;
     }
-
     // 방법 1
-    // const newToDos = Object.assign({}, toDos, { [Date.now()]: { text: text, work: working } });
+    // const newToDos = Object.assign({}, toDos, { [Date.now()]: { text: text, working: working } });
     // Object assign을 통해 3개의 object를 하나의 object로 합침
 
     // 방법2
-    const newToDos = { ...toDos, [Date.now()]: { text: text, work: working } };
+
+    const newToDos = { ...toDos, [Date.now()]: { text: text, working: working } };
     // spread operator를 통해 3개의 object를 하나의 object로 합침
 
     setToDos(newToDos);
+    await saveToDos(newToDos);
     setText('');
   };
+
+  useEffect(() => {
+    loadToDos()
+  }, [])
 
   return (
     <S.TodoContainer bg={theme.bg}>
@@ -58,9 +78,11 @@ export default function App() {
         {Object.keys(toDos).map((key: string) => {
           const toDo = toDos[key];
           return (
-            <S.ToDoList key={key} bgColor={theme.gray}>
-              <S.ToDo>{toDo.text}</S.ToDo>
-            </S.ToDoList>
+            toDo.working === working && (
+              <S.ToDoList key={key} bgColor={theme.gray}>
+                <S.ToDo>{toDo.text}</S.ToDo>
+              </S.ToDoList>
+            )
           );
         })}
       </ScrollView>

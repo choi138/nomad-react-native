@@ -31,7 +31,7 @@ export const Input = styled(TextInput)`
 export const ToDoList = styled(View)<{ bgColor: string }>`
   background-color: ${(props) => props.bgColor};
   margin-bottom: 10;
-  padding: 20px;
+  padding: 18px;
   border-radius: 15;
 `;
 
