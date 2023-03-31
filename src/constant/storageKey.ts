@@ -1,1 +1,1 @@
-export const STORAGE_KEY = "@toDos";
+export const STORAGE_KEY = '@toDos';

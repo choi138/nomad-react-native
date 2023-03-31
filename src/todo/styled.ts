@@ -28,11 +28,14 @@ export const Input = styled(TextInput)`
   font-size: 18;
 `;
 
-export const ToDoList = styled(View)<{ bgColor: string }>`
-  background-color: ${(props) => props.bgColor};
+export const ToDoList = styled(View)<{ bgColor?: string }>`
+  background-color: ${(props) => (props.bgColor ? props.bgColor : null)};
   margin-bottom: 10;
   padding: 18px;
   border-radius: 15;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 export const ToDo = styled(Text)`

@@ -1,9 +1,10 @@
-import { ScrollView, TouchableOpacity } from 'react-native';
+import { ScrollView, Text, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
 
 import { StatusBar } from 'expo-status-bar';
-
+import { FontAwesome } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LottieView from 'lottie-react-native';
 
 import { ToDoItem, STORAGE_KEY } from '../constant';
 
@@ -11,8 +12,7 @@ import { theme } from './colors';
 import * as S from './styled';
 
 export default function App() {
-
-
+  const [loading, setLoading] = useState<boolean>(true);
   const [working, setWorking] = useState<boolean>(true);
   const [text, setText] = useState<string>('');
   const [toDos, setToDos] = useState<ToDoItem>({});
@@ -31,9 +31,10 @@ export default function App() {
 
   const loadToDos = async () => {
     const getToDos = await AsyncStorage.getItem(STORAGE_KEY);
-    console.log(getToDos ? JSON.parse(getToDos) : [])
-    setToDos(getToDos ? JSON.parse(getToDos) : [])
-  }
+    setToDos(getToDos ? JSON.parse(getToDos) : []);
+    setLoading(false);
+    // JSON.parse는 string을 object로 바꿔줌
+  };
 
   const addToDo = async () => {
     if (text === '') {
@@ -53,9 +54,17 @@ export default function App() {
     setText('');
   };
 
+  const deleteToDo = async (id: number) => {
+    const newToDos = { ...toDos };
+    delete newToDos[id];
+    setToDos(newToDos);
+    await saveToDos(newToDos);
+  };
+
   useEffect(() => {
-    loadToDos()
-  }, [])
+    setLoading(true);
+    loadToDos();
+  }, []);
 
   return (
     <S.TodoContainer bg={theme.bg}>
@@ -74,18 +83,35 @@ export default function App() {
         value={text}
         placeholder={working ? 'Add a To Do' : 'Where do you want to go?'}
       />
-      <ScrollView>
-        {Object.keys(toDos).map((key: string) => {
-          const toDo = toDos[key];
-          return (
-            toDo.working === working && (
-              <S.ToDoList key={key} bgColor={theme.gray}>
-                <S.ToDo>{toDo.text}</S.ToDo>
-              </S.ToDoList>
-            )
-          );
-        })}
-      </ScrollView>
+      {loading ? (
+        <S.ToDoList>
+          <LottieView
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+            source={require('../../assets/lottie/201-simple-loader.json')}
+            autoPlay
+            loop={true}
+          />
+        </S.ToDoList>
+      ) : (
+        <ScrollView>
+          {Object.keys(toDos).map((key: string) => {
+            const toDo = toDos[key];
+            return (
+              toDo.working === working && (
+                <S.ToDoList key={key} bgColor={theme.gray}>
+                  <S.ToDo>{toDo.text}</S.ToDo>
+                  <TouchableOpacity onPress={() => deleteToDo}>
+                    <FontAwesome name="remove" size={24} color="white" />
+                  </TouchableOpacity>
+                </S.ToDoList>
+              )
+            );
+          })}
+        </ScrollView>
+      )}
       <StatusBar style="light" />
     </S.TodoContainer>
   );
@@ -113,3 +139,7 @@ https://docs.expo.dev/versions/v44.0.0/react-native/pressable/
 
 리네에선 text-area 대신에 text-input이 있음
  */
+
+// Code Challenge
+// 1. try catch로 error handling하기
+// 2. 로딩중 표시하기
