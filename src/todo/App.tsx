@@ -6,7 +6,7 @@ import { Fontisto } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LottieView from 'lottie-react-native';
 
-import { ToDoItem, STORAGE_KEY } from '../constant';
+import { ToDoItem, STORAGE_TODO_KEY, STORAGE_WORKING_KEY } from '../constant';
 
 import { theme } from './colors';
 import * as S from './styled';
@@ -17,8 +17,23 @@ export default function App() {
   const [text, setText] = useState<string>('');
   const [toDos, setToDos] = useState<ToDoItem>({});
 
-  const travel = () => setWorking(false);
-  const work = () => setWorking(true);
+  const travel = () => {
+    setWorking(false);
+    const saveWorking = JSON.stringify('false');
+    AsyncStorage.setItem(STORAGE_WORKING_KEY, saveWorking);
+  };
+
+  const work = () => {
+    setWorking(true);
+    const saveWorking = JSON.stringify('true');
+    AsyncStorage.setItem(STORAGE_WORKING_KEY, saveWorking);
+  };
+
+  const loadWorking = async () => {
+    const getStorage = await AsyncStorage.getItem(STORAGE_WORKING_KEY);
+    const getWorking = await JSON.parse(getStorage ? getStorage : '');
+    getWorking === 'true' ? setWorking(true) : setWorking(false);
+  };
 
   const onChangeText = (payload: string) => {
     setText(payload);
@@ -26,11 +41,11 @@ export default function App() {
 
   const saveToDos = async (toSave: ToDoItem) => {
     const saveToDos = JSON.stringify(toSave);
-    await AsyncStorage.setItem(STORAGE_KEY, saveToDos);
+    await AsyncStorage.setItem(STORAGE_TODO_KEY, saveToDos);
   };
 
   const loadToDos = async () => {
-    const getToDos = await AsyncStorage.getItem(STORAGE_KEY);
+    const getToDos = await AsyncStorage.getItem(STORAGE_TODO_KEY);
     setToDos(getToDos ? JSON.parse(getToDos) : []);
     setLoading(false);
     // JSON.parse는 string을 object로 바꿔줌
@@ -74,6 +89,7 @@ export default function App() {
   useEffect(() => {
     setLoading(true);
     loadToDos();
+    loadWorking();
   }, []);
 
   return (
@@ -151,5 +167,6 @@ https://docs.expo.dev/versions/v44.0.0/react-native/pressable/
  */
 
 // Code Challenge
-// 1. try catch로 error handling하기
-// 2. 로딩중 표시하기
+// 1. 앱 재실행시, 마지막 상태의 Work 또는 Travel 기억하기
+// 2. Todo에 완료 기능 추가하기
+// 3. Todo에 수정 기능 추가하기
