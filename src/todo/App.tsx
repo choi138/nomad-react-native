@@ -1,4 +1,4 @@
-import { Alert, ScrollView, TouchableOpacity } from 'react-native';
+import { Alert, ScrollView, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { useEffect, useState } from 'react';
 
 import { StatusBar } from 'expo-status-bar';
@@ -14,6 +14,7 @@ import * as S from './styled';
 export default function App() {
   const [loading, setLoading] = useState<boolean>(true);
   const [working, setWorking] = useState<boolean>(true);
+  const [completed, setCompleted] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
   const [toDos, setToDos] = useState<ToDoItem>({});
 
@@ -46,6 +47,7 @@ export default function App() {
 
   const loadToDos = async () => {
     const getToDos = await AsyncStorage.getItem(STORAGE_TODO_KEY);
+    console.log(getToDos);
     setToDos(getToDos ? JSON.parse(getToDos) : []);
     setLoading(false);
     // JSON.parse는 string을 object로 바꿔줌
@@ -61,12 +63,23 @@ export default function App() {
 
     // 방법2
 
-    const newToDos = { ...toDos, [Date.now()]: { text: text, working: working } };
+    const newToDos = {
+      ...toDos,
+      [Date.now()]: { text: text, working: working, completed: completed },
+    };
     // spread operator를 통해 3개의 object를 하나의 object로 합침
 
     setToDos(newToDos);
     await saveToDos(newToDos);
     setText('');
+  };
+
+  const saveCompleted = (key: string) => {
+    setCompleted(!completed);
+    const newToDos = { ...toDos };
+    newToDos[key].completed = !newToDos[key].completed;
+    setToDos(newToDos);
+    saveToDos(newToDos);
   };
 
   const deleteToDo = (key: string) => {
@@ -128,10 +141,32 @@ export default function App() {
             return (
               toDo.working === working && (
                 <S.ToDoList key={key} bgColor={theme.toDoBg}>
-                  <S.ToDo>{toDo.text}</S.ToDo>
-                  <TouchableOpacity onPress={() => deleteToDo(key)}>
-                    <Fontisto name="trash" size={18} color={theme.grey} />
-                  </TouchableOpacity>
+                  <S.ToDo completed={toDo.completed}>{toDo.text}</S.ToDo>
+                  <S.IConContainer>
+                    {!toDo.completed ? (
+                      <TouchableWithoutFeedback onPress={() => saveCompleted(key)}>
+                        <Fontisto
+                          name="checkbox-passive"
+                          size={18}
+                          color={theme.white}
+                          style={{ marginRight: 10 }}
+                        />
+                      </TouchableWithoutFeedback>
+                    ) : (
+                      <TouchableWithoutFeedback onPress={() => saveCompleted(key)}>
+                        <Fontisto
+                          name="checkbox-active"
+                          size={18}
+                          color={theme.white}
+                          style={{ marginRight: 8 }}
+                        />
+                      </TouchableWithoutFeedback>
+                    )}
+
+                    <TouchableOpacity onPress={() => deleteToDo(key)}>
+                      <Fontisto name="trash" size={18} color={theme.grey} />
+                    </TouchableOpacity>
+                  </S.IConContainer>
                 </S.ToDoList>
               )
             );
