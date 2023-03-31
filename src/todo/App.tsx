@@ -9,12 +9,26 @@ import * as S from './styled';
 export default function App() {
   const [working, setWorking] = useState<boolean>(true);
   const [text, setText] = useState<string>('');
+  const [toDos, setToDos] = useState<object>({});
 
   const travel = () => setWorking(false);
   const work = () => setWorking(true);
 
   const onChangeText = (payload: string) => {
     setText(payload);
+  };
+
+  const addToDo = () => {
+    if (text === '') {
+      return;
+    }
+
+    // save to do
+    const newToDos = Object.assign({}, toDos, { [Date.now()]: { text: text, work: working } });
+    // Object assign을 통해 3개의 object를 하나의 object로 합침
+    setToDos(newToDos);
+    setText('');
+    console.log(newToDos);
   };
 
   return (
@@ -28,7 +42,9 @@ export default function App() {
         </TouchableOpacity>
       </S.Header>
       <S.Input
+        onSubmitEditing={addToDo}
         onChangeText={onChangeText}
+        returnKeyType="done"
         value={text}
         placeholder={working ? 'Add a To Do' : 'Where do you want to go?'}
       />
