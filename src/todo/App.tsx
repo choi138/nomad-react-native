@@ -1,4 +1,4 @@
-import { TextInput, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 
 import { StatusBar } from 'expo-status-bar';
@@ -8,8 +8,14 @@ import * as S from './styled';
 
 export default function App() {
   const [working, setWorking] = useState<boolean>(true);
+  const [text, setText] = useState<string>('');
+
   const travel = () => setWorking(false);
   const work = () => setWorking(true);
+
+  const onChangeText = (payload: string) => {
+    setText(payload);
+  };
 
   return (
     <S.TodoContainer bg={theme.bg}>
@@ -21,9 +27,11 @@ export default function App() {
           <S.Title isWorking={!working}>Travel</S.Title>
         </TouchableOpacity>
       </S.Header>
-      <View>
-        <S.Input />
-      </View>
+      <S.Input
+        onChangeText={onChangeText}
+        value={text}
+        placeholder={working ? 'Add a To Do' : 'Where do you want to go?'}
+      />
       <StatusBar style="light" />
     </S.TodoContainer>
   );
