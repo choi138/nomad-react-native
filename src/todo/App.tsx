@@ -15,6 +15,8 @@ export default function App() {
   const [loading, setLoading] = useState<boolean>(true);
   const [working, setWorking] = useState<boolean>(true);
   const [completed, setCompleted] = useState<boolean>(false);
+  const [clicked, setClicked] = useState<boolean>(false);
+  const [editToDo, setEditToDo] = useState<string>('');
   const [text, setText] = useState<string>('');
   const [toDos, setToDos] = useState<ToDoItem>({});
 
@@ -141,8 +143,20 @@ export default function App() {
             return (
               toDo.working === working && (
                 <S.ToDoList key={key} bgColor={theme.toDoBg}>
-                  <S.ToDo completed={toDo.completed}>{toDo.text}</S.ToDo>
+                  {!clicked ? (
+                    <S.TextToDo completed={toDo.completed}>{toDo.text}</S.TextToDo>
+                  ) : (
+                    <S.InputToDo>{toDo.text}</S.InputToDo>
+                  )}
                   <S.IConContainer>
+                    <TouchableWithoutFeedback onPress={() => setClicked(!clicked)}>
+                      <Fontisto
+                        name="save"
+                        size={18}
+                        color={theme.white}
+                        style={{ marginRight: 10 }}
+                      />
+                    </TouchableWithoutFeedback>
                     {!toDo.completed ? (
                       <TouchableWithoutFeedback onPress={() => saveCompleted(key)}>
                         <Fontisto

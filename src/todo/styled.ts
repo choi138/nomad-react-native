@@ -38,11 +38,17 @@ export const ToDoList = styled(View)<{ bgColor?: string }>`
   justify-content: space-between;
 `;
 
-export const ToDo = styled(Text)<{ completed: boolean }>`
+export const TextToDo = styled(Text)<{ completed: boolean }>`
   color: #fafafa;
   font-size: 16;
   font-weight: 500;
   text-decoration-line: ${(props) => (props.completed ? 'line-through' : 'none')};
+`;
+
+export const InputToDo = styled(TextInput)`
+  color: #fafafa;
+  font-size: 16;
+  font-weight: 500;
 `;
 
 export const IConContainer = styled(View)`
