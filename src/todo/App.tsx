@@ -1,8 +1,8 @@
-import { ScrollView, Text, TouchableOpacity } from 'react-native';
+import { Alert, ScrollView, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
 
 import { StatusBar } from 'expo-status-bar';
-import { FontAwesome } from '@expo/vector-icons';
+import { Fontisto } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LottieView from 'lottie-react-native';
 
@@ -54,11 +54,21 @@ export default function App() {
     setText('');
   };
 
-  const deleteToDo = async (id: number) => {
-    const newToDos = { ...toDos };
-    delete newToDos[id];
-    setToDos(newToDos);
-    await saveToDos(newToDos);
+  const deleteToDo = (key: string) => {
+    Alert.alert('Delete To Do', 'Are you sure?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: () => {
+          const newToDos = { ...toDos }; // object 생성
+          delete newToDos[key]; // object 삭제
+          setToDos(newToDos); // 삭제한 object를 state에 저장
+          saveToDos(newToDos);
+        },
+      },
+    ]);
+    return;
   };
 
   useEffect(() => {
@@ -101,10 +111,10 @@ export default function App() {
             const toDo = toDos[key];
             return (
               toDo.working === working && (
-                <S.ToDoList key={key} bgColor={theme.gray}>
+                <S.ToDoList key={key} bgColor={theme.toDoBg}>
                   <S.ToDo>{toDo.text}</S.ToDo>
-                  <TouchableOpacity onPress={() => deleteToDo}>
-                    <FontAwesome name="remove" size={24} color="white" />
+                  <TouchableOpacity onPress={() => deleteToDo(key)}>
+                    <Fontisto name="trash" size={18} color={theme.grey} />
                   </TouchableOpacity>
                 </S.ToDoList>
               )
