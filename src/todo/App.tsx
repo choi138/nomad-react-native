@@ -1,10 +1,4 @@
-import {
-  Alert,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { ScrollView, TextInput, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { StatusBar } from 'expo-status-bar';
