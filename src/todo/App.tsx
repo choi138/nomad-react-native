@@ -17,7 +17,6 @@ export default function App() {
   const [working, setWorking] = useState<boolean>(true);
   const [completed, setCompleted] = useState<boolean>(false);
   const [clicked, setClicked] = useState<boolean>(false);
-  const [editToDo, setEditToDo] = useState<string>('');
   const [text, setText] = useState<string>('');
   const [toDos, setToDos] = useState<ToDoItem>({});
 
@@ -52,6 +51,13 @@ export default function App() {
   const onChangeText = (payload: string) => {
     setText(payload);
   };
+
+  const onEditText = (key: string, text: string) => {
+    const newToDos = { ...toDos };
+    newToDos[key].text = text;
+    setToDos(newToDos);
+    saveToDos(newToDos);
+  }
 
   const saveToDos = async (toSave: ToDoItem) => {
     const saveToDos = JSON.stringify(toSave);
@@ -158,6 +164,7 @@ export default function App() {
                     // 해석하면 ref가 있으면 inputRef.current[i]에 ref를 넣으셈
                     completed={toDo.completed}
                     defaultValue={toDo.text}
+                    onChangeText={(text: string) => onEditText(key, text)}
                   />
                   <S.IConContainer>
                     {clicked && (
