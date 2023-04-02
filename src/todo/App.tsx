@@ -1,5 +1,5 @@
-import { Alert, ScrollView, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import { useEffect, useState } from 'react';
+import { Alert, ScrollView, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import React, { createRef, useEffect, useRef, useState } from 'react';
 
 import { StatusBar } from 'expo-status-bar';
 import { Fontisto } from '@expo/vector-icons';
@@ -12,6 +12,7 @@ import { theme } from './colors';
 import * as S from './styled';
 
 export default function App() {
+  const inputRef = useRef<Array<TextInput>>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [working, setWorking] = useState<boolean>(true);
   const [completed, setCompleted] = useState<boolean>(false);
@@ -19,6 +20,16 @@ export default function App() {
   const [editToDo, setEditToDo] = useState<string>('');
   const [text, setText] = useState<string>('');
   const [toDos, setToDos] = useState<ToDoItem>({});
+
+  const onCheck = (i: number) => {
+    setClicked(!clicked);
+    inputRef.current[i]?.blur();
+  }
+
+  const onPress = (i: number) => {
+    inputRef.current[i]?.focus();
+    setClicked(true);
+  }
 
   const travel = () => {
     setWorking(false);
@@ -49,7 +60,6 @@ export default function App() {
 
   const loadToDos = async () => {
     const getToDos = await AsyncStorage.getItem(STORAGE_TODO_KEY);
-    console.log(getToDos);
     setToDos(getToDos ? JSON.parse(getToDos) : []);
     setLoading(false);
     // JSON.parse는 string을 object로 바꿔줌
@@ -138,18 +148,29 @@ export default function App() {
         </S.ToDoList>
       ) : (
         <ScrollView>
-          {Object.keys(toDos).map((key: string) => {
+          {Object.keys(toDos).map((key: string, i) => {
             const toDo = toDos[key];
             return (
               toDo.working === working && (
                 <S.ToDoList key={key} bgColor={theme.toDoBg}>
-                  {!clicked ? (
-                    <S.TextToDo completed={toDo.completed}>{toDo.text}</S.TextToDo>
-                  ) : (
-                    <S.InputToDo>{toDo.text}</S.InputToDo>
-                  )}
+                  <S.InputToDo
+                    ref={ref => ref && (inputRef.current[i] = ref)}
+                    // 해석하면 ref가 있으면 inputRef.current[i]에 ref를 넣으셈
+                    completed={toDo.completed}
+                    defaultValue={toDo.text}
+                  />
                   <S.IConContainer>
-                    <TouchableWithoutFeedback onPress={() => setClicked(!clicked)}>
+                    {clicked && (
+                      <TouchableWithoutFeedback onPress={() => onCheck(i)}>
+                        <Fontisto
+                          name="checkbox-passive"
+                          size={18}
+                          color={theme.white}
+                          style={{ marginRight: 10 }}
+                        />
+                      </TouchableWithoutFeedback>
+                    )}
+                    <TouchableWithoutFeedback onPress={() => onPress(i)}>
                       <Fontisto
                         name="save"
                         size={18}
@@ -176,7 +197,6 @@ export default function App() {
                         />
                       </TouchableWithoutFeedback>
                     )}
-
                     <TouchableOpacity onPress={() => deleteToDo(key)}>
                       <Fontisto name="trash" size={18} color={theme.grey} />
                     </TouchableOpacity>
@@ -186,9 +206,10 @@ export default function App() {
             );
           })}
         </ScrollView>
-      )}
+      )
+      }
       <StatusBar style="light" />
-    </S.TodoContainer>
+    </S.TodoContainer >
   );
 }
 
