@@ -1,5 +1,11 @@
-import { Alert, ScrollView, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import React, { createRef, useEffect, useRef, useState } from 'react';
+import {
+  Alert,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { StatusBar } from 'expo-status-bar';
 import { Fontisto } from '@expo/vector-icons';
@@ -10,6 +16,16 @@ import { ToDoItem, STORAGE_TODO_KEY, STORAGE_WORKING_KEY } from '../constant';
 
 import { theme } from './colors';
 import * as S from './styled';
+import {
+  loadToDos,
+  loadWorking,
+  onEditDoneClick,
+  onEditStartClick,
+  addToDo,
+  deleteToDo,
+  editToDo,
+  saveCompleted,
+} from './function';
 
 export default function App() {
   const inputRef = useRef<Array<TextInput>>([]);
@@ -19,16 +35,6 @@ export default function App() {
   const [clicked, setClicked] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
   const [toDos, setToDos] = useState<ToDoItem>({});
-
-  const onCheck = (i: number) => {
-    setClicked(!clicked);
-    inputRef.current[i]?.blur();
-  }
-
-  const onPress = (i: number) => {
-    inputRef.current[i]?.focus();
-    setClicked(true);
-  }
 
   const travel = () => {
     setWorking(false);
@@ -42,85 +48,19 @@ export default function App() {
     AsyncStorage.setItem(STORAGE_WORKING_KEY, saveWorking);
   };
 
-  const loadWorking = async () => {
-    const getStorage = await AsyncStorage.getItem(STORAGE_WORKING_KEY);
-    const getWorking = await JSON.parse(getStorage ? getStorage : '');
-    getWorking === 'true' ? setWorking(true) : setWorking(false);
-  };
-
   const onChangeText = (payload: string) => {
     setText(payload);
   };
-
-  const onEditText = (key: string, text: string) => {
-    const newToDos = { ...toDos };
-    newToDos[key].text = text;
-    setToDos(newToDos);
-    saveToDos(newToDos);
-  }
 
   const saveToDos = async (toSave: ToDoItem) => {
     const saveToDos = JSON.stringify(toSave);
     await AsyncStorage.setItem(STORAGE_TODO_KEY, saveToDos);
   };
 
-  const loadToDos = async () => {
-    const getToDos = await AsyncStorage.getItem(STORAGE_TODO_KEY);
-    setToDos(getToDos ? JSON.parse(getToDos) : []);
-    setLoading(false);
-    // JSON.parse는 string을 object로 바꿔줌
-  };
-
-  const addToDo = async () => {
-    if (text === '') {
-      return;
-    }
-    // 방법 1
-    // const newToDos = Object.assign({}, toDos, { [Date.now()]: { text: text, working: working } });
-    // Object assign을 통해 3개의 object를 하나의 object로 합침
-
-    // 방법2
-
-    const newToDos = {
-      ...toDos,
-      [Date.now()]: { text: text, working: working, completed: completed },
-    };
-    // spread operator를 통해 3개의 object를 하나의 object로 합침
-
-    setToDos(newToDos);
-    await saveToDos(newToDos);
-    setText('');
-  };
-
-  const saveCompleted = (key: string) => {
-    setCompleted(!completed);
-    const newToDos = { ...toDos };
-    newToDos[key].completed = !newToDos[key].completed;
-    setToDos(newToDos);
-    saveToDos(newToDos);
-  };
-
-  const deleteToDo = (key: string) => {
-    Alert.alert('Delete To Do', 'Are you sure?', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Delete',
-        style: 'destructive',
-        onPress: () => {
-          const newToDos = { ...toDos }; // object 생성
-          delete newToDos[key]; // object 삭제
-          setToDos(newToDos); // 삭제한 object를 state에 저장
-          saveToDos(newToDos);
-        },
-      },
-    ]);
-    return;
-  };
-
   useEffect(() => {
     setLoading(true);
-    loadToDos();
-    loadWorking();
+    loadToDos({ setLoading, setToDos });
+    loadWorking({ setWorking });
   }, []);
 
   return (
@@ -134,7 +74,9 @@ export default function App() {
         </TouchableOpacity>
       </S.Header>
       <S.Input
-        onSubmitEditing={addToDo}
+        onSubmitEditing={() =>
+          addToDo({ text, toDos, working, completed, setToDos, saveToDos, setText })
+        }
         onChangeText={onChangeText}
         returnKeyType="done"
         value={text}
@@ -160,33 +102,51 @@ export default function App() {
               toDo.working === working && (
                 <S.ToDoList key={key} bgColor={theme.toDoBg}>
                   <S.InputToDo
-                    ref={ref => ref && (inputRef.current[i] = ref)}
+                    ref={(ref) => ref && (inputRef.current[i] = ref)}
                     // 해석하면 ref가 있으면 inputRef.current[i]에 ref를 넣으셈
                     completed={toDo.completed}
                     defaultValue={toDo.text}
-                    onChangeText={(text: string) => onEditText(key, text)}
+                    onChangeText={(text: string) =>
+                      editToDo({ text, key, toDos, setToDos, saveToDos })
+                    }
                   />
                   <S.IConContainer>
-                    {clicked && (
-                      <TouchableWithoutFeedback onPress={() => onCheck(i)}>
+                    {clicked ? (
+                      <TouchableWithoutFeedback
+                        onPress={() => onEditDoneClick({ i, setClicked, inputRef, clicked })}
+                      >
                         <Fontisto
-                          name="checkbox-passive"
+                          name="save"
+                          size={18}
+                          color={theme.white}
+                          style={{ marginRight: 10 }}
+                        />
+                      </TouchableWithoutFeedback>
+                    ) : (
+                      <TouchableWithoutFeedback
+                        onPress={() => onEditStartClick({ i, setClicked, inputRef })}
+                      >
+                        <Fontisto
+                          name="save"
                           size={18}
                           color={theme.white}
                           style={{ marginRight: 10 }}
                         />
                       </TouchableWithoutFeedback>
                     )}
-                    <TouchableWithoutFeedback onPress={() => onPress(i)}>
-                      <Fontisto
-                        name="save"
-                        size={18}
-                        color={theme.white}
-                        style={{ marginRight: 10 }}
-                      />
-                    </TouchableWithoutFeedback>
                     {!toDo.completed ? (
-                      <TouchableWithoutFeedback onPress={() => saveCompleted(key)}>
+                      <TouchableWithoutFeedback
+                        onPress={() =>
+                          saveCompleted({
+                            key,
+                            setCompleted,
+                            completed,
+                            toDos,
+                            setToDos,
+                            saveToDos,
+                          })
+                        }
+                      >
                         <Fontisto
                           name="checkbox-passive"
                           size={18}
@@ -195,7 +155,18 @@ export default function App() {
                         />
                       </TouchableWithoutFeedback>
                     ) : (
-                      <TouchableWithoutFeedback onPress={() => saveCompleted(key)}>
+                      <TouchableWithoutFeedback
+                        onPress={() =>
+                          saveCompleted({
+                            key,
+                            setCompleted,
+                            completed,
+                            toDos,
+                            setToDos,
+                            saveToDos,
+                          })
+                        }
+                      >
                         <Fontisto
                           name="checkbox-active"
                           size={18}
@@ -204,7 +175,9 @@ export default function App() {
                         />
                       </TouchableWithoutFeedback>
                     )}
-                    <TouchableOpacity onPress={() => deleteToDo(key)}>
+                    <TouchableOpacity
+                      onPress={() => deleteToDo({ key, toDos, saveToDos, setToDos })}
+                    >
                       <Fontisto name="trash" size={18} color={theme.grey} />
                     </TouchableOpacity>
                   </S.IConContainer>
@@ -213,10 +186,9 @@ export default function App() {
             );
           })}
         </ScrollView>
-      )
-      }
+      )}
       <StatusBar style="light" />
-    </S.TodoContainer >
+    </S.TodoContainer>
   );
 }
 
