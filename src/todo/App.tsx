@@ -78,7 +78,7 @@ export default function App() {
       />
       {loading ? (
         <S.ToDoList>
-          <LottieView
+          {/* <LottieView
             style={{
               width: '100%',
               height: '100%',
@@ -86,7 +86,7 @@ export default function App() {
             source={require('../../assets/lottie/201-simple-loader.json')}
             autoPlay
             loop={true}
-          />
+          /> */}
         </S.ToDoList>
       ) : (
         <ScrollView>
