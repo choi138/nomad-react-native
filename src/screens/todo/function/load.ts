@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { ToDoItem } from '@/constant';
 
-import { STORAGE_TODO_KEY, STORAGE_WORKING_KEY } from '../../constant';
+import { STORAGE_TODO_KEY, STORAGE_WORKING_KEY } from '../../../constant';
 
 export interface LoadWorkingProps {
   setWorking: React.Dispatch<React.SetStateAction<boolean>>;

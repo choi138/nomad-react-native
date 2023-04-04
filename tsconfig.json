@@ -7,5 +7,5 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "src/todo/colors.ts"]
+  "include": ["src", "src/screens/todo/colors.ts"]
 }

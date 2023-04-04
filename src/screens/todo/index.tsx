@@ -6,7 +6,7 @@ import { Fontisto } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LottieView from 'lottie-react-native';
 
-import { ToDoItem, STORAGE_TODO_KEY, STORAGE_WORKING_KEY } from '../constant';
+import { ToDoItem, STORAGE_TODO_KEY, STORAGE_WORKING_KEY } from '../../constant';
 
 import { theme } from './colors';
 import * as S from './styled';
@@ -21,8 +21,9 @@ import {
   saveCompleted,
 } from './function';
 
-export default function App() {
+export const TodoScreen: React.FC = () => {
   const inputRef = useRef<Array<TextInput>>([]);
+
   const [loading, setLoading] = useState<boolean>(true);
   const [working, setWorking] = useState<boolean>(true);
   const [completed, setCompleted] = useState<boolean>(false);
@@ -78,7 +79,7 @@ export default function App() {
       />
       {loading ? (
         <S.ToDoList>
-          {/* <LottieView
+          <LottieView
             style={{
               width: '100%',
               height: '100%',
@@ -86,7 +87,7 @@ export default function App() {
             source={require('../../assets/lottie/201-simple-loader.json')}
             autoPlay
             loop={true}
-          /> */}
+          />
         </S.ToDoList>
       ) : (
         <ScrollView>
@@ -184,7 +185,7 @@ export default function App() {
       <StatusBar style="light" />
     </S.TodoContainer>
   );
-}
+};
 
 /**
  * TouchableOpacity

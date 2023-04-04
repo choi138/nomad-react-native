@@ -1,6 +1,6 @@
 import { ActivityIndicator } from 'react-native';
 import { Dimensions } from 'react-native';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import * as Location from 'expo-location';
 import { StatusBar } from 'expo-status-bar';
@@ -10,7 +10,7 @@ import { DayList, IconMap } from '@/constant';
 
 import * as S from './styled';
 
-export default function App() {
+export const WeatherScreen: React.FC = () => {
   const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
   const ENV = process.env.API_KEY;
@@ -87,7 +87,7 @@ export default function App() {
       <StatusBar style="light" />
     </S.Container>
   );
-}
+};
 
 // 리네는 web이 아니라서 div를 사용할 수 없음. 대신에 View를 사용함.
 // 모든 text는 Text 컴포넌트 안에 있어야 함.
