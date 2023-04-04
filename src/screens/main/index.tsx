@@ -13,12 +13,13 @@ export const MainScreen: React.FC = () => {
         <S.Title>Main Screen</S.Title>
       </S.TitleWrap>
       <S.DescriptionWrap>
-        <S.Description>
-          Welcome to our app, where you can easily organize your day with a to-do list feature and
-          stay up-to-date on the latest weather information. Plan your day and stay prepared for any
-          weather conditions, all in one convenient place.
-        </S.Description>
+        <S.Description>Stay organized and informed with</S.Description>
+        <S.Description>W&T- featuring a to-do list</S.Description>
+        <S.Description>and daily weather</S.Description>
+        <S.Description>updates at your fingertips.</S.Description>
+        <S.Description>Get started by selecting a tab</S.Description>
       </S.DescriptionWrap>
+      <S.WeatherImage source={require('../../assets/weather.png')} />
       <Button title="Go to Weather" onPress={() => navigate('Weather')} />
       <Button title="Go to ToDo" onPress={() => navigate('ToDo')} />
       <StatusBar style="dark" />
