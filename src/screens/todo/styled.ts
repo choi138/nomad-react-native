@@ -1,26 +1,26 @@
-import { Text, TextInput, View } from 'react-native';
+import { TextInput } from 'react-native';
 
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 
-export const TodoContainer = styled(View)<{ bg: string }>`
+export const TodoContainer = styled.View<{ bg: string }>`
   flex: 1;
   background-color: ${(props) => props.bg};
   padding: 0 20px;
 `;
 
-export const Header = styled(View)`
+export const Header = styled.View`
   flex-direction: row;
   margin-top: 100;
   justify-content: space-between;
 `;
 
-export const Title = styled(Text)<{ isWorking: boolean }>`
+export const Title = styled.Text<{ isWorking: boolean }>`
   font-size: 38;
   font-weight: 600;
   color: ${(props) => (props.isWorking ? '#fafafa' : '#3A3D40')};
 `;
 
-export const Input = styled(TextInput)`
+export const Input = styled.TextInput`
   background-color: white;
   padding: 15px 20px;
   border-radius: 30;
@@ -28,7 +28,7 @@ export const Input = styled(TextInput)`
   font-size: 18;
 `;
 
-export const ToDoList = styled(View)<{ bgColor?: string }>`
+export const ToDoList = styled.View<{ bgColor?: string }>`
   background-color: ${(props) => (props.bgColor ? props.bgColor : null)};
   margin-bottom: 10;
   padding: 18px;
@@ -38,7 +38,7 @@ export const ToDoList = styled(View)<{ bgColor?: string }>`
   justify-content: space-between;
 `;
 
-export const TextToDo = styled(Text)<{ completed: boolean }>`
+export const TextToDo = styled.Text<{ completed: boolean }>`
   color: #fafafa;
   font-size: 16;
   font-weight: 500;
@@ -52,6 +52,6 @@ export const InputToDo = styled(TextInput)<{ completed: boolean }>`
   text-decoration-line: ${(props) => (props.completed ? 'line-through' : 'none')};
 `;
 
-export const IConContainer = styled(View)`
+export const IConContainer = styled.View`
   flex-direction: row;
 `;

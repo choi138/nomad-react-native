@@ -1,15 +1,18 @@
 import { Button, Text, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
+import { StatusBar } from 'expo-status-bar';
+
+import * as S from './styled';
 
 export const MainScreen: React.FC = () => {
-  const navigation = useNavigation();
-
+  const navigate = useNavigation().navigate as (s: string) => void;
   return (
-    <View>
-      <Text>Main</Text>
-      <Button title="Go to Weather" onPress={() => navigation.navigate('WeatherScreen')} />
-      <Button title="Go to ToDo" onPress={() => navigation.navigate('ToDo')} />
-    </View>
+    <S.Wrap>
+      <S.Title>Main Screen</S.Title>
+      <Button title="Go to Weather" onPress={() => navigate('Weather')} />
+      <Button title="Go to ToDo" onPress={() => navigate('ToDo')} />
+      <StatusBar style="dark" />
+    </S.Wrap>
   );
 };

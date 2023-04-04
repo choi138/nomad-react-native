@@ -8,10 +8,10 @@ const Stack = createStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Main" component={MainScreen} />
-        <Stack.Screen name="WeatherScreen" component={WeatherScreen} />
-        <Stack.Screen name="TodoScreen" component={TodoScreen} />
+        <Stack.Screen name="Weather" component={WeatherScreen} />
+        <Stack.Screen name="ToDo" component={TodoScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
