@@ -49,6 +49,7 @@ export const WeatherScreen: React.FC = () => {
     const json = await response.json();
     setLoading(false);
     setDays(json.daily);
+    console.log(location, 'location');
   };
 
   useEffect(() => {
