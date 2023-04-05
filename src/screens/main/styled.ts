@@ -41,7 +41,7 @@ export const WeatherContainer = styled.View`
 export const WeatherImage = styled.Image`
   margin-top: 20px;
   width: 92%;
-  height: 300px;
+  height: 250px;
 `;
 
 export const LinkWrap = styled.View`
