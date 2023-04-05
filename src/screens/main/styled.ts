@@ -1,11 +1,9 @@
 import styled from 'styled-components/native';
 
-export const Container = styled.View`
+export const Container = styled.ScrollView`
   flex: 1;
   flex-direction: column;
   background-color: #fafafa;
-  justify-content: flex-start;
-  padding-top: 100px;
 `;
 
 export const TitleWrap = styled.View`
@@ -35,7 +33,25 @@ export const Description = styled.Text`
   line-height: 30px;
 `;
 
+export const WeatherContainer = styled.View`
+  justify-content: center;
+  align-items: center;
+`;
+
 export const WeatherImage = styled.Image`
-  width: 100%;
+  margin-top: 20px;
+  width: 92%;
   height: 300px;
+`;
+
+export const LinkWrap = styled.View`
+  width: 100%;
+  align-items: flex-start;
+  padding-left: 10px;
+`;
+
+export const LinkButton = styled.Button`
+  width: 100%;
+  font-size: 18px;
+  font-weight: 300;
 `;

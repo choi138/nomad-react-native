@@ -19,9 +19,7 @@ export const CityName = styled.Text`
 
 export const WeatherWrap = styled.ScrollView.attrs({
   contentContainerStyle: {},
-})`
-  border: 1px solid black;
-`;
+})``;
 
 export const WeatherInfo = styled.View<{ screen_width: number; loading: boolean }>`
   width: ${(props) => props.screen_width}px;
