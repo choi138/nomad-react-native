@@ -1,4 +1,4 @@
-export interface DayList {
+export interface DayItem {
   length: number;
   weather: [
     {

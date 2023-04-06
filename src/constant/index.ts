@@ -1,5 +1,5 @@
 export * from './storageToDoKey';
 export * from './storageWorkingKey';
-export * from './dayList';
-export * from './iconMap';
+export * from './day';
+export * from './icon';
 export * from './toDo';

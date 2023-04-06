@@ -6,7 +6,7 @@ import * as Location from 'expo-location';
 import { StatusBar } from 'expo-status-bar';
 import { Fontisto } from '@expo/vector-icons';
 
-import { DayList, IconMap } from '@/constant';
+import { DayItem, IconItem } from '@/constant';
 
 import * as S from './styled';
 
@@ -15,7 +15,7 @@ export const WeatherScreen: React.FC = () => {
 
   const ENV = process.env.API_KEY;
 
-  const icons: IconMap = {
+  const icons: IconItem = {
     Clouds: 'cloudy',
     Clear: 'day-sunny',
     Snow: 'snow',
@@ -25,7 +25,7 @@ export const WeatherScreen: React.FC = () => {
   };
 
   const [city, setCity] = useState<string | null>('Loading...');
-  const [days, setDays] = useState<DayList[]>([]);
+  const [days, setDays] = useState<DayItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [ok, setOk] = useState<boolean>(true);
 
@@ -66,7 +66,7 @@ export const WeatherScreen: React.FC = () => {
             <ActivityIndicator color="white" size="large" />
           </S.WeatherInfo>
         ) : (
-          days.map((day: DayList, index: number) => (
+          days.map((day: DayItem, index: number) => (
             <S.WeatherInfo screen_width={SCREEN_WIDTH} loading={loading} key={index}>
               <S.TempContainer>
                 <S.TempItem>

@@ -1,5 +1,4 @@
-import { Button, Text, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
@@ -24,13 +23,13 @@ export const MainScreen: React.FC = () => {
         <S.WeatherContainer>
           <S.WeatherImage source={require('../../assets/weather.png')} />
           <S.LinkWrap>
-            <S.LinkButton title="Go to Weather" color="black" onPress={() => navigate('Weather')} />
+            <S.LinkButton title="Weather" color="black" onPress={() => navigate('Weather')} />
           </S.LinkWrap>
         </S.WeatherContainer>
         <S.WeatherContainer>
           <S.WeatherImage source={require('../../assets/todo.png')} />
           <S.LinkWrap>
-            <S.LinkButton title="Go to ToDo" color="black" onPress={() => navigate('ToDo')} />
+            <S.LinkButton title="ToDo" color="black" onPress={() => navigate('ToDo')} />
           </S.LinkWrap>
         </S.WeatherContainer>
         <StatusBar style="dark" />
